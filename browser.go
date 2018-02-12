@@ -54,7 +54,7 @@ func (p *UserAgent) detectBrowser(sections []section) {
 			sectionIndex := 2
 			// The version after the engine comment is empty on e.g. Ubuntu
 			// platforms so if this is the case, let's use the next in line.
-			if sections[2].version == "" && slen > 3 {
+			if ((sections[2].version == "") || (sections[2].name == "Version")) && slen > 3 {
 				sectionIndex = 3
 			}
 			p.browser.Version = sections[sectionIndex].version
@@ -69,10 +69,12 @@ func (p *UserAgent) detectBrowser(sections []section) {
 					p.browser.Name = "Opera"
 					p.browser.Version = sections[slen-1].version
 				default:
-					if sections[sectionIndex].name == "Chrome" {
+					if sections[sectionIndex].name == "Chrome" || sections[sectionIndex].name == "CriOS" {
 						p.browser.Name = "Chrome"
 					} else if sections[sectionIndex].name == "Chromium" {
 						p.browser.Name = "Chromium"
+					} else if sections[sectionIndex].name == "FxiOS" {
+						p.browser.Name = "FireFox"
 					} else {
 						p.browser.Name = "Safari"
 					}
